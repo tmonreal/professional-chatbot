@@ -1,13 +1,14 @@
 import os
 import time
 from dotenv import load_dotenv
-from utils import read_doc, chunk_data
+from utils import read_doc, chunk_data, chunk_data_sectionwise
 from embeddings import SentenceTransformerEmbedding
 from sentence_transformers import SentenceTransformer
 from pinecone import Pinecone, ServerlessSpec
 from langchain_pinecone import PineconeVectorStore
 from langchain_groq import ChatGroq
 from langchain.chains import RetrievalQA
+from langchain import PromptTemplate
 
 
 # Load environment variables from .env file and store them in variables
@@ -26,8 +27,11 @@ file_path = r'docs/Trinidad_Monreal_Resume.pdf'
 total = read_doc(file_path)
 
 # Split the document into chunks
-chunked_docs = chunk_data(docs=total, chunk_size=300, chunk_overlap=50)
+chunked_docs = chunk_data_sectionwise(docs=total, chunk_size=1000, chunk_overlap=100)
 type(chunked_docs)
+for i, chunk in enumerate(chunked_docs):
+    print(f"\n--- Chunk {i+1} ---")
+    print(chunk.page_content)
 
 # Connect to Pinecone DB and manage index
 pc = Pinecone(api_key=PINECONE_API_KEY)
@@ -86,14 +90,29 @@ vectorstore = PineconeVectorStore(index_name=index_name,
                                   )
 retriever = vectorstore.as_retriever()
 
-query = "What university did Trinidad attend? What did she study?"
-print(f"Query: {query}")
-vectorstore.similarity_search(query, k=3)
+custom_template = """
+You are analyzing a CV belonging to Trinidad Monreal (female). Use the context below to answer the question.
 
+Context:
+{context}
+
+Question: {question}
+Helpful Answer:
+"""
+
+prompt = PromptTemplate(
+    template=custom_template,
+    input_variables=["context", "question"]
+)
+
+query = "What programming languages does Trinidad know?"
+print(f"Query: {query}")
+vectorstore.similarity_search(query, k=1)
 qa = RetrievalQA.from_chain_type(llm=groq_model,
                                  chain_type="stuff",
-                                 retriever=vectorstore.as_retriever()
+                                 retriever=vectorstore.as_retriever(),
+                                 chain_type_kwargs={"prompt": prompt}
                                  )
 
-result = qa.invoke(query)
+result = qa.invoke({"query": query})
 print("Answer:", result['result'])
