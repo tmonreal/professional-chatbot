@@ -19,10 +19,14 @@ def chunk_data_sectionwise(docs, chunk_size=500, chunk_overlap=100):
     text = "\n".join([doc.page_content for doc in docs])
 
     section_titles = [
+        "Contact",
         "Education",
         "Experience",
         "Courses and Certifications",
+        "Certifications",
+        "Languages",
         "Projects",
+        "Top Skills",
         "Skills",
         "Awards"
     ]

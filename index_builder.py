@@ -16,9 +16,17 @@ cloud = os.environ.get('PINECONE_CLOUD') or 'aws'
 region = os.environ.get('PINECONE_REGION') or 'us-east-1'
 
 # Read CV and chunk
-file_path = r'docs/Trinidad_Monreal_Resume.pdf'
-total = read_doc(file_path)
+cv_path = r'docs/Trinidad_Monreal_Resume.pdf'
+linkedin_path = r'docs/LinkedIn_Profile.pdf'
+
+cv_doc = read_doc(cv_path)
+linkedin_doc = read_doc(linkedin_path)
+total = cv_doc + linkedin_doc
 chunked_docs = chunk_data_sectionwise(docs=total, chunk_size=1000, chunk_overlap=100)
+
+for i,chunk in enumerate(chunked_docs):
+    print(f"Chunk {i+1}: {chunk.page_content[:50]}...")  # Print first 50 characters of each chunk
+
 
 # Connect to Pinecone
 pc = Pinecone(api_key=PINECONE_API_KEY)
