@@ -10,7 +10,6 @@ from langchain_groq import ChatGroq
 from langchain.chains import RetrievalQA
 from langchain import PromptTemplate
 
-
 # Load environment variables from .env file and store them in variables
 load_dotenv()
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
