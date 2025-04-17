@@ -74,7 +74,8 @@ Then open http://127.0.0.1:5000 in your browser to view and interact with the ch
 
 🎥 Watch the demo video below:
 
-[Click here to watch the demo](demo/demo-chatbot.mp4)
+![Chatbot Demo](demo/demo-chatbot.gif)
+
 
 Or download it directly:
 
