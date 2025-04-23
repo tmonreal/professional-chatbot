@@ -34,8 +34,6 @@ pip install -r requirements.txt
 
 ```env
 PINECONE_API_KEY=your_pinecone_key
-PINECONE_REGION=us-east-1
-PINECONE_CLOUD=aws
 GROQ_API_KEY=your_groq_api_key
 ```
 
@@ -56,8 +54,18 @@ flask run
 
 Then open http://127.0.0.1:5000 in your browser to view and interact with the chatbot.
 
+---
 
-## Project Structure
+## Manual Testing
+
+You can test the logic from the terminal using:
+
+```bash
+python test_qa.py
+```
+---
+
+## 📁 Project Structure
 
 | File               | Description                                                                 |
 |--------------------|-----------------------------------------------------------------------------|
@@ -70,9 +78,9 @@ Then open http://127.0.0.1:5000 in your browser to view and interact with the ch
 | `test_qa.py`       | Script for manually testing the QA chain outside of the Flask interface.    |
 | `templates/`       | Contains `index.html`, the chatbot's front-end.                              |
 
-## Demo
+## 🎥 Demo
 
-🎥 Watch the demo video below:
+Watch the demo video below:
 
 ![Chatbot Demo](demo/demo-chatbot.gif)
 
